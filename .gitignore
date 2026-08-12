@@ -1,0 +1,39 @@
+# ==========================================
+# STM32CubeIDE / Eclipse Build Artifacts
+# ==========================================
+Debug/
+Release/
+build/
+*.elf
+*.bin
+*.hex
+*.map
+*.o
+*.d
+*.su
+*.cyclo
+
+# ==========================================
+# Toolchain & User Specific IDE Settings
+# ==========================================
+# 개인 PC 환경(경로) 정보가 들어가는 파일 제거
+.settings/language.settings.xml
+*.launch
+
+# Keil MDK 임시 파일
+*.uvgui.*
+*.uvopt
+*.bak
+*.dep
+
+# VS Code (코드 편집기로 사용 시)
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# ==========================================
+# OS & System Files
+# ==========================================
+.DS_Store
+Thumbs.db
