@@ -1,0 +1,53 @@
+{
+  "description": "Observed native agentic-hil MCP debugging results on the existing STM32F411 firmware.",
+  "target": "STM32F411RETx",
+  "backend": "stlink",
+  "server_bundle": "stlink-gdbserver/7.14.0+st.2",
+  "server_sha256": "aea17a5e497ac37a424d76e36bdfe0a1b46a6ca59a0114f381080d2a231d12ae",
+  "configuration_key": "debuggers.dut.gdb_server_executable",
+  "session_id": "debug-20261019T040645398Z",
+  "started_at": "2026-10-19T04:06:45.035Z",
+  "mode": "attach",
+  "image": {
+    "source": "path",
+    "path": "f411_blinky/target/thumbv7em-none-eabihf/debug/f411_blinky.elf",
+    "sha256": "9479ced40d28fae1e0e3f167939fa71259974f3d4fe388b12017864f9101b312"
+  },
+  "firmware_load_status": "not_started",
+  "breakpoint": {
+    "requested": {
+      "file": "f411_blinky/src/main.rs",
+      "line": 45
+    },
+    "id": 1,
+    "observed_stop_reason": "breakpoint_hit",
+    "expected": true,
+    "frame": {
+      "function": "f411_blinky::__cortex_m_rt_main",
+      "address": "0x08001168",
+      "file": "src/main.rs",
+      "line": 47
+    }
+  },
+  "symbol": {
+    "name": "main",
+    "address": "0x800116f",
+    "size_bytes": 8,
+    "resolved_from": "elf_symbol_table"
+  },
+  "cleanup": {
+    "session_stopped": true,
+    "breakpoints_removed": true,
+    "processes_reaped": true,
+    "core_after_debug_stop": "halted"
+  },
+  "final_reset": {
+    "ok": true,
+    "mode": "run"
+  },
+  "final_lease": {
+    "bench_held": false,
+    "incident_stands": false
+  },
+  "session_log": ".agentic-hil/logs/gdb-debug-20261019T040645094Z.json"
+}

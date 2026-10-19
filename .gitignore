@@ -42,3 +42,8 @@ Thumbs.db
 /.agentic-hil/logs/
 /.agentic-hil/reports/
 /.agentic-hil/artifacts/
+
+# CI bundles, local HIL evidence and Python test caches
+/artifacts/
+__pycache__/
+*.py[cod]

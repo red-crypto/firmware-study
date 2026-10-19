@@ -1,0 +1,93 @@
+name: Firmware build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: firmware-build-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: STM32F411 Debug ELF
+    runs-on: windows-2025
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: pwsh
+    env:
+      CARGO_TERM_COLOR: always
+    steps:
+      # Official release v7.0.1; keep action code fixed independently of tags.
+      - name: Check out the triggering revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Confirm source revision
+        run: |
+          $revision = & git rev-parse HEAD
+          if ($LASTEXITCODE -ne 0) { throw 'Unable to identify checkout revision.' }
+          if ($revision.Trim() -ne $env:GITHUB_SHA) {
+            throw 'Checkout revision does not match the triggering revision.'
+          }
+
+      - name: Install the declared Rust toolchain and target
+        working-directory: f411_blinky
+        run: |
+          # rustup reads rust-toolchain.toml from the firmware working directory.
+          & rustup show active-toolchain
+          if ($LASTEXITCODE -ne 0) { throw 'Unable to install the pinned Rust toolchain.' }
+          & rustc --version --verbose
+          if ($LASTEXITCODE -ne 0) { throw 'Unable to inspect the Rust toolchain.' }
+          & rustup target list --installed
+          if ($LASTEXITCODE -ne 0) { throw 'Unable to inspect installed Rust targets.' }
+
+      - name: Test artifact validation and the HIL boundary without a board
+        run: |
+          & python -m unittest discover -s tests -p 'test_*.py' -v
+          if ($LASTEXITCODE -ne 0) { throw 'Artifact or HIL boundary tests failed.' }
+
+      - name: Build and package the HIL firmware
+        run: ./scripts/Build-HilFirmware.ps1 -ArtifactDirectory artifacts/firmware
+
+      # Official release v7.0.2. This runner has no board or bench credentials.
+      - name: Store the exact firmware artifact
+        id: firmware
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: firmware-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifacts/firmware/
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
+
+      - name: Record artifact identity
+        env:
+          FIRMWARE_ARTIFACT_URL: ${{ steps.firmware.outputs.artifact-url }}
+          FIRMWARE_ARTIFACT_DIGEST: ${{ steps.firmware.outputs.artifact-digest }}
+        run: |
+          $manifest = Get-Content -LiteralPath artifacts/firmware/manifest.json -Raw | ConvertFrom-Json
+          $summary = @(
+            '## Firmware artifact',
+            '',
+            "Source revision: $($manifest.source.commit)",
+            '',
+            "ELF SHA256: $($manifest.image.sha256)",
+            '',
+            "Artifact: $env:FIRMWARE_ARTIFACT_URL",
+            '',
+            "GitHub archive SHA256: $env:FIRMWARE_ARTIFACT_DIGEST",
+            '',
+            'SHA256SUMS:',
+            '',
+            '```text'
+          )
+          $summary += Get-Content -LiteralPath artifacts/firmware/SHA256SUMS
+          $summary += @('```', '', 'Board validation is performed separately through local Agentic HIL using this artifact without rebuilding.')
+          $summary | Add-Content -LiteralPath $env:GITHUB_STEP_SUMMARY -Encoding utf8
