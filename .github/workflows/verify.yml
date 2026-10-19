@@ -1,0 +1,28 @@
+name: Rust STM32 verification
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Select a writable Rust installation directory
+        run: printf 'TASK_RUST_TOOLS_ROOT=%s/firmware-rust-tools\n' "$RUNNER_TEMP" >> "$GITHUB_ENV"
+      - name: Install the pinned Rust toolchain
+        run: make setup
+      - name: Verify host logic and STM32 firmware
+        run: make verify
+      - name: Upload the linked firmware ELF
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: nucleo-f411re-firmware
+          path: target/thumbv7em-none-eabihf/release/firmware
+          if-no-files-found: error

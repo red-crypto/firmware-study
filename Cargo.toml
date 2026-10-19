@@ -1,0 +1,39 @@
+[workspace]
+members = ["crates/app-logic", "firmware"]
+default-members = ["firmware"]
+resolver = "3"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.99.1"
+license = "MIT OR Apache-2.0"
+
+[workspace.dependencies]
+app-logic = { path = "crates/app-logic" }
+cortex-m = { version = "=0.7.7", features = ["critical-section-single-core"] }
+cortex-m-rt = "=0.7.5"
+panic-halt = "=1.0.0"
+stm32f4xx-hal = { version = "=0.23.0", features = ["stm32f411"] }
+
+[workspace.lints.rust]
+unsafe_code = "deny"
+warnings = "deny"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+unwrap_used = "deny"
+expect_used = "deny"
+
+[profile.dev]
+opt-level = 1
+panic = "abort"
+
+[profile.release]
+codegen-units = 1
+debug = 2
+lto = true
+opt-level = "s"
+overflow-checks = true
+panic = "abort"

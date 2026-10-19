@@ -1,0 +1,23 @@
+[package]
+name = "firmware"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+build = "build.rs"
+
+[[bin]]
+name = "firmware"
+path = "src/main.rs"
+test = false
+bench = false
+
+[dependencies]
+app-logic.workspace = true
+cortex-m.workspace = true
+cortex-m-rt.workspace = true
+panic-halt.workspace = true
+stm32f4xx-hal.workspace = true
+
+[lints]
+workspace = true
