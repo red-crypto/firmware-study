@@ -14,6 +14,7 @@
 - [작업 명세 템플릿](docs/templates/task-spec.md): `docs/tasks/<작업-ID>.md`로 복사해 사용
 - [이번 문서 정비 작업 기록](docs/tasks/2026-10-19-documentation-foundation.md)
 - [Rust 버전 고정·CI·동일 ELF HIL 작업 기록](docs/tasks/2026-10-19-build-ci-hil-artifact.md)
+- [GitHub 원격 CI와 동일 산출물 HIL 실행 결과](docs/tasks/2026-10-19-remote-ci-validation.md)
 
 GitHub Actions 빌드와 산출물 보관, 같은 ELF를 로컬 Agentic HIL로 검증하는 진입점이 구성돼 있습니다. 원격 CI 실행과 보드 실행의 통과 여부는 각각 실제 기록으로 판단합니다. GitHub branch protection과 필수 상태 검사는 이 변경에서 조회하거나 설정하지 않았습니다.
 
@@ -83,7 +84,7 @@ f411_blinky/target/thumbv7em-none-eabihf/debug/f411_blinky.elf
 python -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
-로컬 빌드·묶음 전송·동일 ELF의 실제 MCP HIL 검증을 수행한 요약은 [`ci-artifact-validation.json`](hil/evidence/ci-artifact-validation.json)에 있습니다. 미커밋 로컬 산출물의 검증이며 GitHub-hosted workflow 실행·업로드/다운로드는 아직 수행하지 않았습니다. 원격 실행 결과와 구분합니다.
+초기 로컬 빌드 검증은 [`ci-artifact-validation.json`](hil/evidence/ci-artifact-validation.json)에 보존했습니다. 이후 [GitHub run 39211945467](https://github.com/red-crypto/firmware-study/actions/runs/39211945467)의 빌드·시험 35개·업로드가 성공했고, 내려받은 동일 ELF를 재빌드 없이 실제 MCP HIL로 검증했습니다. 원격 실행의 commit·artifact·SHA·HIL 연결은 [`remote-ci-validation.json`](hil/evidence/remote-ci-validation.json)에 기록했습니다.
 
 ## HIL 구성
 
