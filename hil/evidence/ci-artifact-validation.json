@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "description": "Local validation of the implemented CI artifact format and its real Agentic HIL MCP consumer. This was not a GitHub-hosted Actions run.",
+  "date": "2026-10-19",
+  "task": "CI-001",
+  "requirements": ["REQ-BASE-001", "REQ-BASE-002", "REQ-BASE-003", "REQ-PIPE-001", "REQ-PIPE-002", "REQ-PIPE-003"],
+  "source": {
+    "commit": "3cd3d0abc21c5ab735c78587a67f97d79e34ecf1",
+    "dirty": true,
+    "build_input_fingerprint": "192ab3645057bdbf2cf40cd1d5970eb9ba3c1e615ff4cd2e6c5de3f13300812b",
+    "note": "Includes uncommitted implementation. Not proof for the clean commit alone. Per-file input hashes are preserved in the local manifest."
+  },
+  "build": {
+    "status": "passed",
+    "rust": "1.98.1",
+    "rustc_commit": "48a229ceaefd4985c50990b14116b6d856af0985",
+    "cargo": "1.98.1",
+    "target": "thumbv7em-none-eabihf",
+    "profile": "debug",
+    "entrypoint": "scripts/Build-HilFirmware.ps1 -Offline",
+    "cargo_command": ["cargo", "build", "--locked", "--target", "thumbv7em-none-eabihf", "--offline"],
+    "artifact_directory": "artifacts/firmware",
+    "transferred_directory": "artifacts/download/local-transfer",
+    "image_sha256": "9479ced40d28fae1e0e3f167939fa71259974f3d4fe388b12017864f9101b312",
+    "manifest_sha256": "7e5299dade8037af7a62755e49554e5a026454af7207c797feea9d75d4af03af"
+  },
+  "unit_tests": {
+    "command": "python -m unittest discover -s tests -p test_*.py -v",
+    "total": 35,
+    "passed": 32,
+    "skipped": 3,
+    "failed": 0,
+    "skip_reason": "Windows account cannot create file/directory symbolic links. Windows reparse-point refusal is additionally covered by a mock-based test."
+  },
+  "workflow": {
+    "path": ".github/workflows/firmware-build.yml",
+    "static_validation": "actionlint 1.7.12 passed",
+    "github_execution": "not-run",
+    "note": "Workflow exists locally; commit/push, GitHub-hosted execution and artifact upload/download have not been performed in this task."
+  },
+  "negative_input": {
+    "expected_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "exit_code": 2,
+    "error": "Image SHA256 mismatch",
+    "hil_run_directories_before": 1,
+    "hil_run_directories_after": 1,
+    "mcp_started": false,
+    "basis": "Verification is before MCP construction, covered by unit tests and the real local rejection check."
+  },
+  "hil": {
+    "status": "passed",
+    "agentic_hil_version": "0.24.0",
+    "transport": "official agentic-hil mcp-stdio / test_reactor_run",
+    "run": "run-179ca48df83d65d1",
+    "plan_sha256": "28b38b067bb4a14bf6daa35fa5de72630a0146ff717c1a678d7c87ad65d256e9",
+    "observed_flash_sha256": "9479ced40d28fae1e0e3f167939fa71259974f3d4fe388b12017864f9101b312",
+    "flash_verified": true,
+    "received_text": "Hello World",
+    "bytes_received": 13,
+    "cleanup_ok": true,
+    "reset_mode": "run",
+    "rebuild_between_transfer_and_flash": false,
+    "local_evidence": "artifacts/hil/20261019T064319Z-490fe954c00c/evidence.json",
+    "original_report": "Run-specific canonical report location and raw MCP response are preserved in local_evidence.",
+    "scope": "Flash read-back and UART Hello World within 5 seconds. No exactly-once, physical LED, pendulum or motor-control measurement."
+  }
+}
