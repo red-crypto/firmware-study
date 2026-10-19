@@ -1,0 +1,6 @@
+# Keep host tests on the host; only firmware commands select the MCU target.
+[alias]
+firmware = "build --locked --package firmware --target thumbv7em-none-eabihf --release"
+
+[target.thumbv7em-none-eabihf]
+rustflags = ["-C", "link-arg=-Tlink.x"]
