@@ -1,0 +1,22 @@
+[package]
+name = "f411_blinky"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+cortex-m = "0.7.7"
+cortex-m-rt = "0.7.5"
+panic-halt = "1.0"
+embedded-hal = "1.0"
+
+[dependencies.stm32f4xx-hal]
+version = "0.23.0"
+features = ["stm32f411"]
+
+[[bin]]
+name = "f411_blinky"
+path = "src/main.rs"
+test = false
+bench = false
+
+#임베디드 펌웨어 타깃은 OS가 없는 #![no_std] 환경이기 때문에 OS 기능(스레드, 콘솔 I/O, 힙 메모리 등)에 의존하는 기본 test 크레이트가 아예 제공되지 않습니다.
