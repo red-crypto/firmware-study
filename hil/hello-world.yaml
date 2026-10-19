@@ -1,0 +1,25 @@
+# STM32F411RE adaptation of the official Nucleo-F446RE demo loop.
+# Build first with ./scripts/Build-HilFirmware.ps1 from the repository root.
+# Run through MCP test_reactor_run with test_config_path: hil/hello-world.yaml.
+# dut and dut_uart are declared by the external authoritative configuration.
+# UART: USART2 PA2/PA3 through ST-LINK VCP, 115200 baud, 8N1.
+version: 3
+name: nucleo-f411re-hello-world
+steps:
+  # Listen before reset so the one-time boot banner is captured for this boot.
+  - device: dut
+    action: flash
+    image_path: f411_blinky/target/thumbv7em-none-eabihf/debug/f411_blinky.elf
+    reset_after_flash: false
+  - device: dut_uart
+    action: uart_open
+    clear_buffer: true
+  - device: dut
+    action: reset
+    mode: run
+  - device: dut_uart
+    action: uart_read
+    comparator:
+      equals: "Hello World"
+    timeout_s: 5
+# End-of-run cleanup closes the UART on both pass and failure.

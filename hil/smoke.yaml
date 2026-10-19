@@ -1,0 +1,13 @@
+# Deployment smoke only: program the ELF, then reset the target into run mode.
+# This plan does not observe the LED or assert UART/application behavior.
+# Probe the connected board separately through MCP before running this plan.
+version: 3
+name: f411-blinky-deployment-smoke
+steps:
+  - device: dut
+    action: flash
+    image_path: f411_blinky/target/thumbv7em-none-eabihf/debug/f411_blinky.elf
+    reset_after_flash: false
+  - device: dut
+    action: reset
+    mode: run

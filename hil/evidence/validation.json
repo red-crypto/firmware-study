@@ -1,0 +1,52 @@
+{
+  "description": "Observed results from native agentic-hil MCP calls; canonical reports are maintained outside the repository by agentic-hil.",
+  "target": "STM32F411RETx",
+  "debugger": "dut",
+  "uart": "dut_uart",
+  "uart_baudrate": 115200,
+  "image_path": "f411_blinky/target/thumbv7em-none-eabihf/debug/f411_blinky.elf",
+  "runs": [
+    {
+      "plan": "hil/hello-world.yaml",
+      "run": "run-59bb698b867df944",
+      "expected_ok": true,
+      "observed_ok": true,
+      "error_type": null,
+      "flash_verified": true,
+      "firmware_sha256": "9479ced40d28fae1e0e3f167939fa71259974f3d4fe388b12017864f9101b312",
+      "received_text": "Hello World",
+      "bytes_received": 13,
+      "cleanup_ok": true,
+      "canonical_report": "C:\\Users\\user\\.agentic-hil\\state\\projects\\f2692ed190621329484be2c3\\reports\\runs\\run-59bb698b867df944.json"
+    },
+    {
+      "plan": "hil/hello-world-negative.yaml",
+      "run": "run-b09ae48dc4958f90",
+      "expected_ok": false,
+      "observed_ok": false,
+      "error_type": "comparator_unmet",
+      "flash_verified": true,
+      "firmware_sha256": "9479ced40d28fae1e0e3f167939fa71259974f3d4fe388b12017864f9101b312",
+      "received_text": "Hello World\r\n",
+      "bytes_received": 13,
+      "cleanup_ok": true,
+      "canonical_report": "C:\\Users\\user\\.agentic-hil\\state\\projects\\f2692ed190621329484be2c3\\reports\\runs\\run-b09ae48dc4958f90.json"
+    },
+    {
+      "plan": "hil/hello-world.yaml",
+      "run": "run-d7121ca7cba51ac1",
+      "expected_ok": true,
+      "observed_ok": true,
+      "error_type": null,
+      "flash_verified": true,
+      "firmware_sha256": "9479ced40d28fae1e0e3f167939fa71259974f3d4fe388b12017864f9101b312",
+      "received_text": "Hello World",
+      "bytes_received": 13,
+      "cleanup_ok": true,
+      "canonical_report": "C:\\Users\\user\\.agentic-hil\\state\\projects\\f2692ed190621329484be2c3\\reports\\runs\\run-d7121ca7cba51ac1.json"
+    }
+  ],
+  "verification_scope": "Flash read-back verification and exact UART boot-banner assertion. LED behavior was not measured.",
+  "final_reset_mode": "run",
+  "final_uart_session_closed": true
+}

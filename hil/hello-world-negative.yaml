@@ -1,0 +1,24 @@
+# Expected-fail companion to hello-world.yaml: only the expected banner differs.
+# A healthy demo emits "Hello World", so this plan MUST fail the UART comparator.
+# Use once to verify that the HIL assertion detects incorrect firmware output;
+# this file is deliberately excluded from any default passing regression plan.
+# Build first, then use MCP test_reactor_run with this explicit test_config_path.
+version: 3
+name: nucleo-f411re-hello-world-negative
+steps:
+  - device: dut
+    action: flash
+    image_path: f411_blinky/target/thumbv7em-none-eabihf/debug/f411_blinky.elf
+    reset_after_flash: false
+  - device: dut_uart
+    action: uart_open
+    clear_buffer: true
+  - device: dut
+    action: reset
+    mode: run
+  - device: dut_uart
+    action: uart_read
+    comparator:
+      equals: "HIL_NEGATIVE_BANNER_MUST_NOT_APPEAR"
+    timeout_s: 5
+# End-of-run cleanup still closes the UART after the expected comparator failure.

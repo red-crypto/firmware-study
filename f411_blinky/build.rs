@@ -1,9 +1,4 @@
-use std::{
-    env,
-    fs::File,
-    io::Write,
-    path::PathBuf,
-};
+use std::{env, fs::File, io::Write, path::PathBuf};
 
 fn main() {
     let out = PathBuf::from(env::var_os("OUT_DIR").unwrap());

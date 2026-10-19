@@ -1,0 +1,29 @@
+# Portable bootstrap profile for a new host: agentic-hil setup --agent codex.
+# The authoritative configuration is generated outside this repository.
+# Host executables, ST-Link serials and COM numbers come from discovery.
+# An existing authoritative configuration is managed through MCP, separately.
+target:
+  name: f411_blinky
+  controller: STM32F411RETx
+
+debuggers:
+  dut:
+    type: stlink
+    timeout_s: 60
+    permissions:
+      allow_flash: true
+      allow_reset: true
+      allow_raw_debugger_commands: false
+      allow_mass_erase: false
+
+artifacts:
+  allowed_roots: [f411_blinky/target]
+  allowed_extensions: [.elf, .hex, .bin]
+
+com_ports:
+  dut_uart:
+    device: null
+    baudrate: 115200
+    # This project's boot-banner tests only read from the UART.
+    permissions:
+      allow_write: false
